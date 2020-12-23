@@ -562,6 +562,7 @@ def main():
         if st.checkbox("Want to Use this model to predict on a new dataset?"):
             xgb_predictor(model_xgb, rows, columns, df, drop_list)
 
+#This is the driver function
 
 if __name__ == "__main__":
     main()
