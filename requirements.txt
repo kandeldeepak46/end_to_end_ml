@@ -1,0 +1,5 @@
+xgboost
+streamlit
+plotly
+mlxtend
+seaborn
