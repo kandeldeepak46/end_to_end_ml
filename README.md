@@ -16,15 +16,23 @@ Install the necessary packages
 $ cd end_to_end_ml
 $ pip install -r requirements.txt
 ```
+You can run locally via
+```bash
+$ streamlit run app.py
+
+```
+
+
+## Deploy on Heroku
+
 Make a public repo on you Github account
 ```
 $ git push origin <YOUR_BRANCH>
 ```
 
-## Deploy on Heroku
 - Make account in [Heroku](https://heroku.com/)
 - Create new app
-- connect to Github
+- Connect to Github
 - Enable Automatic Deploy for CI/CD
 
 Follow [my_heroku_ml_app](https://endtoendmldemo.herokuapp.com/) for demo.
