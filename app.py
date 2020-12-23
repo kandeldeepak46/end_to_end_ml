@@ -1,23 +1,5 @@
-import os
-import base64
-import time
-import datetime
-
-import numpy as np
-import pandas as pd
-import streamlit as st
-import plotly.express as px
-import matplotlib.pyplot as plt
-
-from loguru import logger
-from xgboost import XGBClassifier
-from mlxtend.plotting import plot_decision_regions
-
-from sklearn import metrics
-from sklearn.preprocessing import LabelEncoder
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler, RobustScaler
-from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     precision_score,
     recall_score,
@@ -27,8 +9,56 @@ from sklearn.metrics import (
     classification_report,
     confusion_matrix,
 )
-from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, RobustScaler
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import LabelEncoder
+from sklearn import metrics
+from mlxtend.plotting import plot_decision_regions
+from xgboost import XGBClassifier
+from loguru import logger
+import matplotlib.pyplot as plt
+import plotly.express as px
+import streamlit as st
+import pandas as pd
+import numpy as np
+import datetime
+import time
+import base64
+import os
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+
+
+@deepak-kandel
+deepak-kandel
+/
+end_to_end_ml
+1
+00
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+Settings
+end_to_end_ml/app.py /
+
+
+@deepak-kandel
+deepak-kandel Initial Commit
+Latest commit b978d33 20 minutes ago
+History
+1 contributor
+497 lines(400 sloc)  18.9 KB
 
 
 train_data = os.path.join(os.path.dirname(__file__), "training.csv")
@@ -44,7 +74,8 @@ def load_data(filename=None):
     df = pd.read_csv(filename)
     df = df.dropna(axis=0, how="all")
 
-    df.time = [datetime.datetime.strptime(x, "%m,%d/%Y %H:%M") for x in df.time]
+    df.time = [datetime.datetime.strptime(
+        x, "%m,%d/%Y %H:%M") for x in df.time]
 
     return df, df.shape[0], df.shape[1], filename
 
@@ -72,7 +103,8 @@ def datetime_processing(df):
     min_time = df.time.min()
 
     min_norm, max_norm = -1, 1
-    df["date"] = (df.time) * (max_norm - min_norm) / (max_time - min_time) + min_norm
+    df["date"] = (df.time) * (max_norm - min_norm) / \
+        (max_time - min_time) + min_norm
 
     return df
 
@@ -109,16 +141,19 @@ def feature_summary(data):
 
     df = pd.DataFrame(index=data.columns, columns=col_list)
     df["Null"] = list(
-        [len(data[col][data[col].isnull()]) for i, col in enumerate(data.columns)]
+        [len(data[col][data[col].isnull()])
+         for i, col in enumerate(data.columns)]
     )
     df["Unique_Count"] = list(
         [len(data[col].unique()) for i, col in enumerate(data.columns)]
     )
-    df["Data_type"] = list([data[col].dtype for i, col in enumerate(data.columns)])
+    df["Data_type"] = list(
+        [data[col].dtype for i, col in enumerate(data.columns)])
     for i, col in enumerate(data.columns):
         if "float" in str(data[col].dtype) or "int" in str(data[col].dtype):
             df.at[col, "Max/Min"] = (
-                str(round(data[col].max(), 2)) + "/" + str(round(data[col].min(), 2))
+                str(round(data[col].max(), 2)) + "/" +
+                str(round(data[col].min(), 2))
             )
             df.at[col, "Mean"] = data[col].mean()
             df.at[col, "Std"] = data[col].std()
@@ -128,15 +163,16 @@ def feature_summary(data):
     return df.fillna("-")
 
 
-@st.cache(allow_output_mutation = True)
+@st.cache(allow_output_mutation=True)
 def XGB_train_metrics(df, params_set):
     """Return metrics and model for XGB"""
 
-    X = df.drop(columns = ['status'])
+    X = df.drop(columns=['status'])
     Y = df.status
-    X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state = 0)
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state=0)
 
-    model_xgb = XGBClassifier(max_depth = params_set[0], eta = params_set[1], min_child_weight = params_set[2], subsample = params_set[3], colsample_bylevel = params_set[4], colsample_bytree =params_set[5])
+    model_xgb = XGBClassifier(max_depth=params_set[0], eta=params_set[1], min_child_weight=params_set[2],
+                              subsample=params_set[3], colsample_bylevel=params_set[4], colsample_bytree=params_set[5])
 
     model_xgb.fit(X_train, y_train)
 
