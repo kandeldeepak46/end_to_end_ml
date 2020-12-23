@@ -27,4 +27,4 @@ $ git push origin <YOUR_BRANCH>
 - connect to Github
 - Enable Automatic Deploy for CI/CD
 
-                             Happy Learning
+Follow [MY_HEROKU_ML_APP](https://endtoendmldemo.herokuapp.com/) For Demo.
