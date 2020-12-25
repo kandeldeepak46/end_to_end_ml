@@ -26,7 +26,7 @@ import base64
 from mlxtend.plotting import plot_decision_regions
 from sklearn.decomposition import PCA
 
-
+## Data Preproecssing and EDA
 @st.cache
 def load_data(filename=None):
     filename_default = "training.csv"
